@@ -27,7 +27,7 @@ public class ConfigClientWatchTests {
 
 	@Test
 	public void stateChangedWorks() {
-		ConfigClientWatch watch = new ConfigClientWatch(null);
+		ConfigClientWatch watch = new ConfigClientWatch(null, null);
 		assertThat(watch.stateChanged(null, "1")).isTrue();
 		assertThat(watch.stateChanged("1", "2")).isTrue();
 		assertThat(watch.stateChanged("1", null)).isTrue();

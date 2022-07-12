@@ -80,8 +80,8 @@ public class ConfigClientAutoConfiguration {
 	protected static class ConfigClientWatchConfiguration {
 
 		@Bean
-		public ConfigClientWatch configClientWatch(ContextRefresher contextRefresher) {
-			return new ConfigClientWatch(contextRefresher);
+		public ConfigClientWatch configClientWatch(ContextRefresher contextRefresher, ConfigServicePropertySourceLocator locator) {
+			return new ConfigClientWatch(contextRefresher, locator);
 		}
 
 	}

@@ -10,10 +10,7 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/spring-cloud-samples/config-repo
-          repos:
-            - patterns: multi-repo-demo-*
-              uri: https://github.com/spring-cloud-samples/config-repo
+          uri: https://gitlab.apusic.com/clarechu/config-repo
 
 server:
   port: 8888

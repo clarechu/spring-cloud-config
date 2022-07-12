@@ -39,7 +39,7 @@
 	<modules>
 		<module>spring-cloud-config-dependencies</module>
 		<module>spring-cloud-config-client</module>
-		<module>spring-cloud-config-server</module>
+<!--		<module>spring-cloud-config-server</module>-->
 		<module>spring-cloud-config-monitor</module>
 		<module>spring-cloud-config-sample</module>
 		<module>spring-cloud-starter-config</module>
@@ -204,10 +204,10 @@
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>flatten-maven-plugin</artifactId>
 			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--			</plugin>-->
 			<plugin>
 				<groupId>io.spring.javaformat</groupId>
 				<artifactId>spring-javaformat-maven-plugin</artifactId>
@@ -217,10 +217,10 @@
 
 	<reporting>
 		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-checkstyle-plugin</artifactId>
-			</plugin>
+<!--			<plugin>-->
+<!--				<groupId>org.apache.maven.plugins</groupId>-->
+<!--				<artifactId>maven-checkstyle-plugin</artifactId>-->
+<!--			</plugin>-->
 		</plugins>
 	</reporting>
 

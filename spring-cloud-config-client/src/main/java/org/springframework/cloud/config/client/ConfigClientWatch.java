@@ -24,9 +24,12 @@ import javax.annotation.PostConstruct;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
+import org.jetbrains.annotations.Nullable;
 import org.springframework.cloud.context.refresh.ContextRefresher;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.core.env.CompositePropertySource;
 import org.springframework.core.env.Environment;
+import org.springframework.core.env.PropertySource;
 import org.springframework.scheduling.annotation.Scheduled;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -40,12 +43,15 @@ public class ConfigClientWatch implements Closeable, EnvironmentAware {
 
 	private final AtomicBoolean running = new AtomicBoolean(false);
 
+	private final ConfigServicePropertySourceLocator locator;
+
 	private final ContextRefresher refresher;
 
 	private Environment environment;
 
-	public ConfigClientWatch(ContextRefresher refresher) {
+	public ConfigClientWatch(ContextRefresher refresher, ConfigServicePropertySourceLocator locator) {
 		this.refresher = refresher;
+		this.locator = locator;
 	}
 
 	@Override
@@ -58,10 +64,10 @@ public class ConfigClientWatch implements Closeable, EnvironmentAware {
 		this.running.compareAndSet(false, true);
 	}
 
-	@Scheduled(initialDelayString = "${spring.cloud.config.watch.initialDelay:180000}",
-			fixedDelayString = "${spring.cloud.config.watch.delay:500}")
+	@Scheduled(initialDelayString = "${spring.cloud.config.watch.initialDelay:180000}", fixedDelayString = "${spring.cloud.config.watch.delay:500}")
 	public void watchConfigServer() {
 		if (this.running.get()) {
+			String newVersion = getNewConfigVersion();
 			String newState = this.environment.getProperty("config.client.state");
 			String oldState = ConfigClientStateHolder.getState();
 
@@ -73,9 +79,18 @@ public class ConfigClientWatch implements Closeable, EnvironmentAware {
 		}
 	}
 
+	@Nullable
+	private String getNewConfigVersion() {
+		PropertySource<?> propertySource = locator.locate(environment);
+		if (propertySource instanceof CompositePropertySource) {
+			CompositePropertySource compositePropertySource = (CompositePropertySource) propertySource;
+			return (String) propertySource.getProperty("config.client.version");
+		}
+		return null;
+	}
+
 	/* for testing */ boolean stateChanged(String oldState, String newState) {
-		return (!hasText(oldState) && hasText(newState))
-				|| (hasText(oldState) && !oldState.equals(newState));
+		return (!hasText(oldState) && hasText(newState)) || (hasText(oldState) && !oldState.equals(newState));
 	}
 
 	@Override
